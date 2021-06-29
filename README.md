@@ -1,4 +1,4 @@
-# architeture
+# Architecture
 
 A new Flutter project.
 
