@@ -9,39 +9,34 @@ part of 'order_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$OrderStore on _OrderStoreBase, Store {
-  final _$valueAtom = Atom(name: '_OrderStoreBase.value');
+  final _$listAllOrdersResponseAtom =
+      Atom(name: '_OrderStoreBase.listAllOrdersResponse');
 
   @override
-  int get value {
-    _$valueAtom.reportRead();
-    return super.value;
+  StatusResponse<List<Order>> get listAllOrdersResponse {
+    _$listAllOrdersResponseAtom.reportRead();
+    return super.listAllOrdersResponse;
   }
 
   @override
-  set value(int value) {
-    _$valueAtom.reportWrite(value, super.value, () {
-      super.value = value;
+  set listAllOrdersResponse(StatusResponse<List<Order>> value) {
+    _$listAllOrdersResponseAtom.reportWrite(value, super.listAllOrdersResponse,
+        () {
+      super.listAllOrdersResponse = value;
     });
   }
 
-  final _$_OrderStoreBaseActionController =
-      ActionController(name: '_OrderStoreBase');
+  final _$getAllOrdersAsyncAction = AsyncAction('_OrderStoreBase.getAllOrders');
 
   @override
-  void increment() {
-    final _$actionInfo = _$_OrderStoreBaseActionController.startAction(
-        name: '_OrderStoreBase.increment');
-    try {
-      return super.increment();
-    } finally {
-      _$_OrderStoreBaseActionController.endAction(_$actionInfo);
-    }
+  Future<void> getAllOrders() {
+    return _$getAllOrdersAsyncAction.run(() => super.getAllOrders());
   }
 
   @override
   String toString() {
     return '''
-value: ${value}
+listAllOrdersResponse: ${listAllOrdersResponse}
     ''';
   }
 }

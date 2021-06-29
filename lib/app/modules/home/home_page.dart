@@ -66,12 +66,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                                 Modular.to.pushNamed(OrderModule.routeName);
                               },
                               color: Theme.of(context).accentColor,
-                              child: Text(
-                                "Ver Todas Ordens",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
+                              text: "Ver Ordens Pendentes",
                             ),
                           ),
                         ),
@@ -83,29 +78,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                             child: CustomRaisedButton(
                               onPressed: () {},
                               color: Theme.of(context).accentColor,
-                              child: Text(
-                                "Ver Ordens Pendentes",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: SizedBox(
-                            height: height * 0.1,
-                            width: width * 0.9,
-                            child: CustomRaisedButton(
-                              onPressed: () {},
-                              color: Theme.of(context).accentColor,
-                              child: Text(
-                                "Solicitar Ordem",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
+                              text: "Solicitar Ordem",
                             ),
                           ),
                         )

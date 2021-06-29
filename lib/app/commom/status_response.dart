@@ -14,5 +14,5 @@ class StatusResponse<T> {
 
   bool get hasError => status == Status.ERROR;
   bool get isLoading => status == Status.LOADING;
-  bool get isCompletet => status == Status.COMPLETED;
+  bool get isCompleted => status == Status.COMPLETED;
 }
