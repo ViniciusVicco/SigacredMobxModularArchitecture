@@ -5,7 +5,7 @@ class CustomRaisedButton extends StatelessWidget {
   final String text;
   final Color color;
   CustomRaisedButton(
-      {this.text, @required this.onPressed, @required this.color});
+      {@required this.text, @required this.onPressed, @required this.color});
 
   @override
   Widget build(BuildContext context) {

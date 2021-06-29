@@ -26,6 +26,21 @@ mixin _$OrderStore on _OrderStoreBase, Store {
     });
   }
 
+  final _$newOrderResponseAtom = Atom(name: '_OrderStoreBase.newOrderResponse');
+
+  @override
+  StatusResponse<bool> get newOrderResponse {
+    _$newOrderResponseAtom.reportRead();
+    return super.newOrderResponse;
+  }
+
+  @override
+  set newOrderResponse(StatusResponse<bool> value) {
+    _$newOrderResponseAtom.reportWrite(value, super.newOrderResponse, () {
+      super.newOrderResponse = value;
+    });
+  }
+
   final _$getAllOrdersAsyncAction = AsyncAction('_OrderStoreBase.getAllOrders');
 
   @override
@@ -33,10 +48,19 @@ mixin _$OrderStore on _OrderStoreBase, Store {
     return _$getAllOrdersAsyncAction.run(() => super.getAllOrders());
   }
 
+  final _$createNewOrderAsyncAction =
+      AsyncAction('_OrderStoreBase.createNewOrder');
+
+  @override
+  Future<void> createNewOrder() {
+    return _$createNewOrderAsyncAction.run(() => super.createNewOrder());
+  }
+
   @override
   String toString() {
     return '''
-listAllOrdersResponse: ${listAllOrdersResponse}
+listAllOrdersResponse: ${listAllOrdersResponse},
+newOrderResponse: ${newOrderResponse}
     ''';
   }
 }

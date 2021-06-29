@@ -6,10 +6,10 @@ class Order {
   int id;
   Client cliente;
   Item iten;
-  int dateOrdem;
-  Null dateStart;
-  Null dateClosed;
-  Null obsOrdem;
+  String dateOrdem;
+  String dateStart;
+  String dateClosed;
+  String obsOrdem;
   bool paussed;
 
   Order(
@@ -27,9 +27,27 @@ class Order {
     cliente =
         json['cliente'] != null ? new Client.fromJson(json['cliente']) : null;
     iten = json['iten'] != null ? new Item.fromJson(json['iten']) : null;
-    dateOrdem = json['dateOrdem'];
-    dateStart = json['dateStart'];
-    dateClosed = json['dateClosed'];
+    if (json['dateOrdem'] == null) {
+      json['dateOrdem'] = null;
+    } else {
+      dateOrdem = json['dateOrdem'] is String
+          ? json['dateOrdem']
+          : json['dateOrdem'].toString();
+    }
+    if (json['dateStart'] == null) {
+      dateStart = null;
+    } else {
+      dateStart = json['dateStart'] is String
+          ? json['dateStart']
+          : json['dateStart'].toString();
+    }
+    if (json['dateClosed'] == null) {
+      dateStart = null;
+    } else {
+      dateStart = json['dateClosed'] is String
+          ? json['dateClosed']
+          : json['dateClosed'].toString();
+    }
     obsOrdem = json['obsOrdem'];
     paussed = json['paussed'];
   }

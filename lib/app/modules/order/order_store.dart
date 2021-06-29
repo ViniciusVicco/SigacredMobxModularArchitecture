@@ -10,15 +10,38 @@ class OrderStore = _OrderStoreBase with _$OrderStore;
 abstract class _OrderStoreBase with Store {
   @observable
   StatusResponse<List<Order>> listAllOrdersResponse = StatusResponse();
+
   OrderRepository _orderRepository = OrderRepository();
+
+  List<Order> listOfValidOrders = [];
+
   @action
   Future<void> getAllOrders() async {
     listAllOrdersResponse = StatusResponse.loading();
     try {
       List<Order> data = await _orderRepository.getAllOrders();
-      listAllOrdersResponse = StatusResponse.completed(data);
+      data.forEach((element) {
+        if (element.dateClosed == null) {
+          listOfValidOrders.add(element);
+        }
+      });
+      listAllOrdersResponse = StatusResponse.completed(listOfValidOrders);
     } catch (error) {
-      StatusResponse.error(error);
+      listAllOrdersResponse = StatusResponse.error(error);
+    }
+  }
+
+  @observable
+  StatusResponse<bool> newOrderResponse = StatusResponse();
+
+  @action
+  Future<void> createNewOrder() async {
+    newOrderResponse = StatusResponse.loading();
+    try {
+      await _orderRepository.createNewOrder();
+      newOrderResponse = StatusResponse.completed(null);
+    } catch (error) {
+      newOrderResponse = StatusResponse.error(error);
     }
   }
 }
