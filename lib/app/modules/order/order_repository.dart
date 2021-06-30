@@ -14,14 +14,22 @@ class OrderRepository {
     }).toList();
   }
 
-  Future<void> createNewOrder() async {
+  Future<void> createNewOrder(int clientId) async {
     final String endPoint = "/v1/ordens/create";
+
     final Map<String, dynamic> body = {
-      "idCliente": 1,
+      "idClient": clientId,
       "idItem": 2,
       "dateOrdem": DateTime.now().toIso8601String()
     };
     final String path = baseUrl + endPoint;
-    final response = await dio.post(path, queryParameters: body);
+    await dio.post(path, data: body);
+  }
+
+  Future<void> closeOrder(int orderId, String obsOrdem) async {
+    final String endPoint = "/v1/ordens/closeOrdem";
+    final String path = baseUrl + endPoint;
+    final Map<String, dynamic> body = {"id": orderId, "obsOrdem": obsOrdem};
+    await dio.post(path, data: body);
   }
 }

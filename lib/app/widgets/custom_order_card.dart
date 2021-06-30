@@ -1,11 +1,24 @@
 import 'package:architeture/app/models/order_model.dart';
+import 'package:architeture/app/modules/order/order_store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 import 'custom_raised_button.dart';
 
-class CustomOrderCard extends StatelessWidget {
+class CustomOrderCard extends StatefulWidget {
   final Order order;
   const CustomOrderCard({Key key, this.order}) : super(key: key);
+
+  @override
+  _CustomOrderCardState createState() => _CustomOrderCardState();
+}
+
+class _CustomOrderCardState extends State<CustomOrderCard> {
+  TextEditingController observationTextController = TextEditingController();
+  TextEditingController pauseOrderTextController = TextEditingController();
+  TextEditingController restartOrderTextController = TextEditingController();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final controller = Modular.get<OrderStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +37,7 @@ class CustomOrderCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Center(
                     child: Text(
-                      order.paussed ? "Pausado" : "Em atendimanto",
+                      widget.order.paussed ? "Pausado" : "Em atendimanto",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -42,7 +55,7 @@ class CustomOrderCard extends StatelessWidget {
                             "Cliente: ",
                           ),
                           Text(
-                            order.cliente.nome,
+                            widget.order.cliente.nome,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -54,7 +67,7 @@ class CustomOrderCard extends StatelessWidget {
                             "Número da Ordem de Serviço: ",
                           ),
                           Text(
-                            order.id.toString(),
+                            widget.order.id.toString(),
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -81,7 +94,7 @@ class CustomOrderCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        order.iten.problem,
+                        widget.order.iten.problem,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -95,12 +108,63 @@ class CustomOrderCard extends StatelessWidget {
                       SizedBox(
                         height: height * 0.05,
                         child: CustomRaisedButton(
-                          text: "Finalizar Serviço",
+                          text: "Finalizar Ordem",
                           color: Colors.green,
-                          onPressed: () {},
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    backgroundColor: Colors.white,
+                                    title: Text(
+                                        "Finalizar Ordem ${widget.order.id}"),
+                                    content: Form(
+                                      key: formKey,
+                                      child: TextFormField(
+                                        controller: observationTextController,
+                                        validator: (text) {
+                                          if (text.isEmpty) {
+                                            return 'Campo não pode estar vazio';
+                                          }
+                                          return null;
+                                        },
+                                        decoration: InputDecoration(
+                                            hintText:
+                                                "Descreva uma observação da ordem"),
+                                      ),
+                                    ),
+                                    actions: [
+                                      CustomRaisedButton(
+                                        color: Colors.green,
+                                        onPressed: () {
+                                          if (formKey.currentState.validate()) {
+                                            controller
+                                                .closeOrder(
+                                                    context,
+                                                    widget.order.id,
+                                                    observationTextController
+                                                        .text)
+                                                .then((value) =>
+                                                    controller.getAllOrders());
+                                            Navigator.of(context).pop();
+                                          }
+                                        },
+                                        text: "Finalizar",
+                                      ),
+                                      CustomRaisedButton(
+                                        color: Colors.red,
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        text: "Cancelar",
+                                      ),
+                                    ],
+                                  );
+                                });
+                          },
                         ),
                       ),
-                      order.paussed
+                      widget.order.paussed
                           ? CustomRaisedButton(
                               color: Colors.blue,
                               onPressed: () {},

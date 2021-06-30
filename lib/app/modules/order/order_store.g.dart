@@ -41,6 +41,21 @@ mixin _$OrderStore on _OrderStoreBase, Store {
     });
   }
 
+  final _$endOrderResponseAtom = Atom(name: '_OrderStoreBase.endOrderResponse');
+
+  @override
+  StatusResponse<bool> get endOrderResponse {
+    _$endOrderResponseAtom.reportRead();
+    return super.endOrderResponse;
+  }
+
+  @override
+  set endOrderResponse(StatusResponse<bool> value) {
+    _$endOrderResponseAtom.reportWrite(value, super.endOrderResponse, () {
+      super.endOrderResponse = value;
+    });
+  }
+
   final _$getAllOrdersAsyncAction = AsyncAction('_OrderStoreBase.getAllOrders');
 
   @override
@@ -52,15 +67,24 @@ mixin _$OrderStore on _OrderStoreBase, Store {
       AsyncAction('_OrderStoreBase.createNewOrder');
 
   @override
-  Future<void> createNewOrder() {
-    return _$createNewOrderAsyncAction.run(() => super.createNewOrder());
+  Future<void> createNewOrder(BuildContext context) {
+    return _$createNewOrderAsyncAction.run(() => super.createNewOrder(context));
+  }
+
+  final _$closeOrderAsyncAction = AsyncAction('_OrderStoreBase.closeOrder');
+
+  @override
+  Future<void> closeOrder(BuildContext context, int orderId, String obsOrdem) {
+    return _$closeOrderAsyncAction
+        .run(() => super.closeOrder(context, orderId, obsOrdem));
   }
 
   @override
   String toString() {
     return '''
 listAllOrdersResponse: ${listAllOrdersResponse},
-newOrderResponse: ${newOrderResponse}
+newOrderResponse: ${newOrderResponse},
+endOrderResponse: ${endOrderResponse}
     ''';
   }
 }

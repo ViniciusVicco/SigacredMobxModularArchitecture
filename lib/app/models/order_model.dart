@@ -44,7 +44,7 @@ class Order {
     if (json['dateClosed'] == null) {
       dateStart = null;
     } else {
-      dateStart = json['dateClosed'] is String
+      dateClosed = json['dateClosed'] is String
           ? json['dateClosed']
           : json['dateClosed'].toString();
     }

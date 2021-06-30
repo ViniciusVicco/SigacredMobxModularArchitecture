@@ -14,6 +14,8 @@ class RequestOrderPage extends StatefulWidget {
 
 class _RequestOrderPageState extends State<RequestOrderPage> {
   final controller = Modular.get<OrderStore>();
+  String dropdownValue = 'Monty';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,22 +25,71 @@ class _RequestOrderPageState extends State<RequestOrderPage> {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: Center(
-        child: Observer(builder: (_) {
-          if (controller.newOrderResponse.isLoading) {
-            return CircularProgressIndicator();
-          }
-          if (controller.newOrderResponse.hasError) {
-            return Text("Ocorreu um erro");
-          }
-          return CustomRaisedButton(
-            color: Theme.of(context).accentColor,
-            onPressed: () {
-              controller.createNewOrder();
-            },
-            text: "Solicitar Nova Ordem De Serviço",
-          );
-        }),
+      body: Column(
+        children: [
+          Card(
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Text(
+                    "Selecione um cliente:",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                ),
+                DropdownButton<String>(
+                  value: dropdownValue,
+                  icon: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: const Icon(Icons.person),
+                  ),
+                  iconSize: 18,
+                  underline: Container(
+                    height: 2,
+                  ),
+                  onChanged: (String newValue) {
+                    setState(() {
+                      dropdownValue = newValue;
+                      if (newValue == "Monty") {
+                        controller.clientId = 1;
+                      } else {
+                        controller.clientId = 3;
+                      }
+                    });
+                  },
+                  items: <String>['Monty', 'Danna']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding:
+                EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.3),
+            child: Center(
+              child: Observer(builder: (_) {
+                if (controller.newOrderResponse.isLoading) {
+                  return CircularProgressIndicator();
+                }
+                if (controller.newOrderResponse.hasError) {
+                  return Text("Ocorreu um erro");
+                }
+                return CustomRaisedButton(
+                  color: Theme.of(context).accentColor,
+                  onPressed: () {
+                    controller.createNewOrder(context);
+                  },
+                  text: "Solicitar Nova Ordem De Serviço",
+                );
+              }),
+            ),
+          ),
+        ],
       ),
     );
   }
