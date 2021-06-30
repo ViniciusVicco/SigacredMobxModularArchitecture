@@ -1,6 +1,7 @@
 import 'package:architeture/app/modules/order/order_repository.dart';
 import 'package:architeture/app/modules/order/order_page.dart';
 import 'package:architeture/app/modules/order/order_store.dart';
+import 'package:architeture/app/modules/order/pages/order_history_page.dart';
 import 'package:architeture/app/modules/order/pages/request_order_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -17,5 +18,9 @@ class OrderModule extends Module {
     ChildRoute(Modular.initialRoute, child: (_, args) => OrderPage()),
     ChildRoute(RequestOrderPage.routeName,
         child: (_, args) => RequestOrderPage()),
+    ChildRoute(OrderHistoryPage.routeName,
+        child: (_, args) => OrderHistoryPage(
+              orderId: args.data['orderId'],
+            )),
   ];
 }

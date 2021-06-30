@@ -56,6 +56,55 @@ mixin _$OrderStore on _OrderStoreBase, Store {
     });
   }
 
+  final _$startOrderResponseAtom =
+      Atom(name: '_OrderStoreBase.startOrderResponse');
+
+  @override
+  StatusResponse<bool> get startOrderResponse {
+    _$startOrderResponseAtom.reportRead();
+    return super.startOrderResponse;
+  }
+
+  @override
+  set startOrderResponse(StatusResponse<bool> value) {
+    _$startOrderResponseAtom.reportWrite(value, super.startOrderResponse, () {
+      super.startOrderResponse = value;
+    });
+  }
+
+  final _$pauseOrderResponseAtom =
+      Atom(name: '_OrderStoreBase.pauseOrderResponse');
+
+  @override
+  StatusResponse<bool> get pauseOrderResponse {
+    _$pauseOrderResponseAtom.reportRead();
+    return super.pauseOrderResponse;
+  }
+
+  @override
+  set pauseOrderResponse(StatusResponse<bool> value) {
+    _$pauseOrderResponseAtom.reportWrite(value, super.pauseOrderResponse, () {
+      super.pauseOrderResponse = value;
+    });
+  }
+
+  final _$orderHistoryListAppResponseAtom =
+      Atom(name: '_OrderStoreBase.orderHistoryListAppResponse');
+
+  @override
+  StatusResponse<List<OrderHistory>> get orderHistoryListAppResponse {
+    _$orderHistoryListAppResponseAtom.reportRead();
+    return super.orderHistoryListAppResponse;
+  }
+
+  @override
+  set orderHistoryListAppResponse(StatusResponse<List<OrderHistory>> value) {
+    _$orderHistoryListAppResponseAtom
+        .reportWrite(value, super.orderHistoryListAppResponse, () {
+      super.orderHistoryListAppResponse = value;
+    });
+  }
+
   final _$getAllOrdersAsyncAction = AsyncAction('_OrderStoreBase.getAllOrders');
 
   @override
@@ -79,12 +128,40 @@ mixin _$OrderStore on _OrderStoreBase, Store {
         .run(() => super.closeOrder(context, orderId, obsOrdem));
   }
 
+  final _$startOrderAsyncAction = AsyncAction('_OrderStoreBase.startOrder');
+
+  @override
+  Future<void> startOrder(BuildContext context, int orderId) {
+    return _$startOrderAsyncAction
+        .run(() => super.startOrder(context, orderId));
+  }
+
+  final _$pauseOrderAsyncAction = AsyncAction('_OrderStoreBase.pauseOrder');
+
+  @override
+  Future<void> pauseOrder(BuildContext context, int orderId, String motion) {
+    return _$pauseOrderAsyncAction
+        .run(() => super.pauseOrder(context, orderId, motion));
+  }
+
+  final _$getOrderHistoryAsyncAction =
+      AsyncAction('_OrderStoreBase.getOrderHistory');
+
+  @override
+  Future<void> getOrderHistory(int orderId) {
+    return _$getOrderHistoryAsyncAction
+        .run(() => super.getOrderHistory(orderId));
+  }
+
   @override
   String toString() {
     return '''
 listAllOrdersResponse: ${listAllOrdersResponse},
 newOrderResponse: ${newOrderResponse},
-endOrderResponse: ${endOrderResponse}
+endOrderResponse: ${endOrderResponse},
+startOrderResponse: ${startOrderResponse},
+pauseOrderResponse: ${pauseOrderResponse},
+orderHistoryListAppResponse: ${orderHistoryListAppResponse}
     ''';
   }
 }

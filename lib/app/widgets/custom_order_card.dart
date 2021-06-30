@@ -1,5 +1,7 @@
 import 'package:architeture/app/models/order_model.dart';
+import 'package:architeture/app/modules/order/order_module.dart';
 import 'package:architeture/app/modules/order/order_store.dart';
+import 'package:architeture/app/modules/order/pages/order_history_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -16,7 +18,6 @@ class CustomOrderCard extends StatefulWidget {
 class _CustomOrderCardState extends State<CustomOrderCard> {
   TextEditingController observationTextController = TextEditingController();
   TextEditingController pauseOrderTextController = TextEditingController();
-  TextEditingController restartOrderTextController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final controller = Modular.get<OrderStore>();
 
@@ -167,14 +168,84 @@ class _CustomOrderCardState extends State<CustomOrderCard> {
                       widget.order.paussed
                           ? CustomRaisedButton(
                               color: Colors.blue,
-                              onPressed: () {},
+                              onPressed: () {
+                                controller
+                                    .startOrder(context, widget.order.id)
+                                    .then((value) => controller.getAllOrders());
+                              },
                               text: "Iniciar",
                             )
                           : CustomRaisedButton(
                               color: Colors.red,
-                              onPressed: () {},
-                              text: "Encerrar",
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        backgroundColor: Colors.white,
+                                        title: Text(
+                                            "Pausar Ordem ${widget.order.id}"),
+                                        content: Form(
+                                          key: formKey,
+                                          child: TextFormField(
+                                            controller:
+                                                pauseOrderTextController,
+                                            validator: (text) {
+                                              if (text.isEmpty) {
+                                                return 'Campo não pode estar vazio';
+                                              }
+                                              return null;
+                                            },
+                                            decoration: InputDecoration(
+                                                hintText:
+                                                    "Descreva motivo da pausa"),
+                                          ),
+                                        ),
+                                        actions: [
+                                          CustomRaisedButton(
+                                            color: Colors.green,
+                                            onPressed: () {
+                                              if (formKey.currentState
+                                                  .validate()) {
+                                                controller
+                                                    .pauseOrder(
+                                                        context,
+                                                        widget.order.id,
+                                                        pauseOrderTextController
+                                                            .text)
+                                                    .then((value) => controller
+                                                        .getAllOrders());
+                                                Navigator.of(context).pop();
+                                              }
+                                            },
+                                            text: "Pausar",
+                                          ),
+                                          CustomRaisedButton(
+                                            color: Colors.red,
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            text: "Cancelar",
+                                          ),
+                                        ],
+                                      );
+                                    });
+                              },
+                              text: "Pausar",
                             ),
+                      Offstage(
+                        offstage: !widget.order.paussed,
+                        child: CustomRaisedButton(
+                          color: Colors.black,
+                          onPressed: () {
+                            Modular.to.pushNamed(
+                                OrderModule.routeName +
+                                    OrderHistoryPage.routeName,
+                                arguments: {"orderId": widget.order.id});
+                          },
+                          text: "Checar Histórico",
+                        ),
+                      )
                     ],
                   ),
                 )
