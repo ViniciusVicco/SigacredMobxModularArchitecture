@@ -1,6 +1,4 @@
-# SigaCredTeste
-
-# Projeto flutter utilizando mobx e modular.
+# SigaCredTeste - Projeto flutter utilizando mobx e modular.
 
 # Como vou rodar o projeto ?
 
