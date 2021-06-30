@@ -24,15 +24,17 @@ class _CustomOrderCardState extends State<CustomOrderCard> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
       child: Container(
-        height: height * 0.20,
+        height: !widget.order.paussed ? height * 0.20 : height * 0.26,
         child: Card(
           elevation: 1,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
@@ -104,149 +106,167 @@ class _CustomOrderCardState extends State<CustomOrderCard> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 3),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: height * 0.05,
-                        child: CustomRaisedButton(
-                          text: "Finalizar Ordem",
-                          color: Colors.green,
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    backgroundColor: Colors.white,
-                                    title: Text(
-                                        "Finalizar Ordem ${widget.order.id}"),
-                                    content: Form(
-                                      key: formKey,
-                                      child: TextFormField(
-                                        controller: observationTextController,
-                                        validator: (text) {
-                                          if (text.isEmpty) {
-                                            return 'Campo não pode estar vazio';
-                                          }
-                                          return null;
-                                        },
-                                        decoration: InputDecoration(
-                                            hintText:
-                                                "Descreva uma observação da ordem"),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 30),
+                        child: SizedBox(
+                          height: height * 0.05,
+                          child: CustomRaisedButton(
+                            text: "Finalizar Ordem",
+                            color: Colors.green,
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      backgroundColor: Colors.white,
+                                      title: Text(
+                                          "Finalizar Ordem ${widget.order.id}"),
+                                      content: Form(
+                                        key: formKey,
+                                        child: TextFormField(
+                                          controller: observationTextController,
+                                          validator: (text) {
+                                            if (text.isEmpty) {
+                                              return 'Campo não pode estar vazio';
+                                            }
+                                            return null;
+                                          },
+                                          decoration: InputDecoration(
+                                              hintText:
+                                                  "Descreva uma observação da ordem"),
+                                        ),
                                       ),
-                                    ),
-                                    actions: [
-                                      CustomRaisedButton(
-                                        color: Colors.green,
-                                        onPressed: () {
-                                          if (formKey.currentState.validate()) {
-                                            controller
-                                                .closeOrder(
-                                                    context,
-                                                    widget.order.id,
-                                                    observationTextController
-                                                        .text)
-                                                .then((value) =>
-                                                    controller.getAllOrders());
+                                      actions: [
+                                        CustomRaisedButton(
+                                          color: Colors.green,
+                                          onPressed: () {
+                                            if (formKey.currentState
+                                                .validate()) {
+                                              controller
+                                                  .closeOrder(
+                                                      context,
+                                                      widget.order.id,
+                                                      observationTextController
+                                                          .text)
+                                                  .then((value) => controller
+                                                      .getAllOrders());
+                                              Navigator.of(context).pop();
+                                            }
+                                          },
+                                          text: "Finalizar",
+                                        ),
+                                        CustomRaisedButton(
+                                          color: Colors.red,
+                                          onPressed: () {
                                             Navigator.of(context).pop();
-                                          }
-                                        },
-                                        text: "Finalizar",
-                                      ),
-                                      CustomRaisedButton(
-                                        color: Colors.red,
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        text: "Cancelar",
-                                      ),
-                                    ],
-                                  );
-                                });
-                          },
+                                          },
+                                          text: "Cancelar",
+                                        ),
+                                      ],
+                                    );
+                                  });
+                            },
+                          ),
                         ),
                       ),
                       widget.order.paussed
-                          ? CustomRaisedButton(
-                              color: Colors.blue,
-                              onPressed: () {
-                                controller
-                                    .startOrder(context, widget.order.id)
-                                    .then((value) => controller.getAllOrders());
-                              },
-                              text: "Iniciar",
+                          ? SizedBox(
+                              height: height * 0.05,
+                              child: CustomRaisedButton(
+                                color: Colors.blue,
+                                onPressed: () {
+                                  controller
+                                      .startOrder(context, widget.order.id)
+                                      .then(
+                                          (value) => controller.getAllOrders());
+                                },
+                                text: "Iniciar",
+                              ),
                             )
-                          : CustomRaisedButton(
-                              color: Colors.red,
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        backgroundColor: Colors.white,
-                                        title: Text(
-                                            "Pausar Ordem ${widget.order.id}"),
-                                        content: Form(
-                                          key: formKey,
-                                          child: TextFormField(
-                                            controller:
-                                                pauseOrderTextController,
-                                            validator: (text) {
-                                              if (text.isEmpty) {
-                                                return 'Campo não pode estar vazio';
-                                              }
-                                              return null;
-                                            },
-                                            decoration: InputDecoration(
-                                                hintText:
-                                                    "Descreva motivo da pausa"),
+                          : SizedBox(
+                              height: height * 0.05,
+                              child: CustomRaisedButton(
+                                color: Colors.red,
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          backgroundColor: Colors.white,
+                                          title: Text(
+                                              "Pausar Ordem ${widget.order.id}"),
+                                          content: Form(
+                                            key: formKey,
+                                            child: TextFormField(
+                                              controller:
+                                                  pauseOrderTextController,
+                                              validator: (text) {
+                                                if (text.isEmpty) {
+                                                  return 'Campo não pode estar vazio';
+                                                }
+                                                return null;
+                                              },
+                                              decoration: InputDecoration(
+                                                  hintText:
+                                                      "Descreva motivo da pausa"),
+                                            ),
                                           ),
-                                        ),
-                                        actions: [
-                                          CustomRaisedButton(
-                                            color: Colors.green,
-                                            onPressed: () {
-                                              if (formKey.currentState
-                                                  .validate()) {
-                                                controller
-                                                    .pauseOrder(
-                                                        context,
-                                                        widget.order.id,
-                                                        pauseOrderTextController
-                                                            .text)
-                                                    .then((value) => controller
-                                                        .getAllOrders());
+                                          actions: [
+                                            CustomRaisedButton(
+                                              color: Colors.green,
+                                              onPressed: () {
+                                                if (formKey.currentState
+                                                    .validate()) {
+                                                  controller
+                                                      .pauseOrder(
+                                                          context,
+                                                          widget.order.id,
+                                                          pauseOrderTextController
+                                                              .text)
+                                                      .then((value) =>
+                                                          controller
+                                                              .getAllOrders());
+                                                  Navigator.of(context).pop();
+                                                }
+                                              },
+                                              text: "Pausar",
+                                            ),
+                                            CustomRaisedButton(
+                                              color: Colors.red,
+                                              onPressed: () {
                                                 Navigator.of(context).pop();
-                                              }
-                                            },
-                                            text: "Pausar",
-                                          ),
-                                          CustomRaisedButton(
-                                            color: Colors.red,
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            text: "Cancelar",
-                                          ),
-                                        ],
-                                      );
-                                    });
-                              },
-                              text: "Pausar",
+                                              },
+                                              text: "Cancelar",
+                                            ),
+                                          ],
+                                        );
+                                      });
+                                },
+                                text: "Pausar",
+                              ),
                             ),
-                      Offstage(
-                        offstage: !widget.order.paussed,
-                        child: CustomRaisedButton(
-                          color: Colors.black,
-                          onPressed: () {
-                            Modular.to.pushNamed(
-                                OrderModule.routeName +
-                                    OrderHistoryPage.routeName,
-                                arguments: {"orderId": widget.order.id});
-                          },
-                          text: "Checar Histórico",
-                        ),
-                      )
                     ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Offstage(
+                    offstage: !widget.order.paussed,
+                    child: SizedBox(
+                      height: height * 0.05,
+                      child: CustomRaisedButton(
+                        color: Colors.black,
+                        onPressed: () {
+                          Modular.to.pushNamed(
+                              OrderModule.routeName +
+                                  OrderHistoryPage.routeName,
+                              arguments: {"orderId": widget.order.id});
+                        },
+                        text: "Checar Histórico",
+                      ),
+                    ),
                   ),
                 )
               ],
