@@ -1,10 +1,10 @@
 import 'package:architeture/app/models/order_model.dart';
 import 'package:dio/dio.dart';
-import 'dart:convert' as convert;
 
 class OrderRepository {
   final String baseUrl = "https://desafio.sigacred.com.br";
   Dio dio = new Dio();
+
   Future<List<Order>> getAllOrders() async {
     final String endPoint = "/v1/ordens";
     final String path = baseUrl + endPoint;
@@ -12,5 +12,24 @@ class OrderRepository {
     return (response.data as List).map((order) {
       return Order.fromJson(order);
     }).toList();
+  }
+
+  Future<void> createNewOrder(int clientId) async {
+    final String endPoint = "/v1/ordens/create";
+
+    final Map<String, dynamic> body = {
+      "idClient": clientId,
+      "idItem": 2,
+      "dateOrdem": DateTime.now().toIso8601String()
+    };
+    final String path = baseUrl + endPoint;
+    await dio.post(path, data: body);
+  }
+
+  Future<void> closeOrder(int orderId, String obsOrdem) async {
+    final String endPoint = "/v1/ordens/closeOrdem";
+    final String path = baseUrl + endPoint;
+    final Map<String, dynamic> body = {"id": orderId, "obsOrdem": obsOrdem};
+    await dio.post(path, data: body);
   }
 }

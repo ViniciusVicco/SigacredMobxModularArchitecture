@@ -26,6 +26,36 @@ mixin _$OrderStore on _OrderStoreBase, Store {
     });
   }
 
+  final _$newOrderResponseAtom = Atom(name: '_OrderStoreBase.newOrderResponse');
+
+  @override
+  StatusResponse<bool> get newOrderResponse {
+    _$newOrderResponseAtom.reportRead();
+    return super.newOrderResponse;
+  }
+
+  @override
+  set newOrderResponse(StatusResponse<bool> value) {
+    _$newOrderResponseAtom.reportWrite(value, super.newOrderResponse, () {
+      super.newOrderResponse = value;
+    });
+  }
+
+  final _$endOrderResponseAtom = Atom(name: '_OrderStoreBase.endOrderResponse');
+
+  @override
+  StatusResponse<bool> get endOrderResponse {
+    _$endOrderResponseAtom.reportRead();
+    return super.endOrderResponse;
+  }
+
+  @override
+  set endOrderResponse(StatusResponse<bool> value) {
+    _$endOrderResponseAtom.reportWrite(value, super.endOrderResponse, () {
+      super.endOrderResponse = value;
+    });
+  }
+
   final _$getAllOrdersAsyncAction = AsyncAction('_OrderStoreBase.getAllOrders');
 
   @override
@@ -33,10 +63,28 @@ mixin _$OrderStore on _OrderStoreBase, Store {
     return _$getAllOrdersAsyncAction.run(() => super.getAllOrders());
   }
 
+  final _$createNewOrderAsyncAction =
+      AsyncAction('_OrderStoreBase.createNewOrder');
+
+  @override
+  Future<void> createNewOrder(BuildContext context) {
+    return _$createNewOrderAsyncAction.run(() => super.createNewOrder(context));
+  }
+
+  final _$closeOrderAsyncAction = AsyncAction('_OrderStoreBase.closeOrder');
+
+  @override
+  Future<void> closeOrder(BuildContext context, int orderId, String obsOrdem) {
+    return _$closeOrderAsyncAction
+        .run(() => super.closeOrder(context, orderId, obsOrdem));
+  }
+
   @override
   String toString() {
     return '''
-listAllOrdersResponse: ${listAllOrdersResponse}
+listAllOrdersResponse: ${listAllOrdersResponse},
+newOrderResponse: ${newOrderResponse},
+endOrderResponse: ${endOrderResponse}
     ''';
   }
 }

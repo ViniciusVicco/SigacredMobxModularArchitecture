@@ -1,7 +1,9 @@
 import 'package:architeture/app/modules/order/order_module.dart';
+import 'package:architeture/app/modules/order/pages/request_order_page.dart';
 import 'package:architeture/app/widgets/custom_raised_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'home_store.dart';
@@ -76,12 +78,15 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                             height: height * 0.1,
                             width: width * 0.9,
                             child: CustomRaisedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Modular.to.pushNamed(OrderModule.routeName +
+                                    RequestOrderPage.routeName);
+                              },
                               color: Theme.of(context).accentColor,
-                              text: "Solicitar Ordem",
+                              text: "Solicitar Nova Ordem",
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
